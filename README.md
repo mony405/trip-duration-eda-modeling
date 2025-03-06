@@ -1,53 +1,56 @@
-# NYC Trip Duration Prediction - Ridge Regression
+# NYC Taxi Trip Duration Prediction
 
-## Overview
-This project focuses on predicting the duration of NYC taxi trips using machine learning. The Ridge regression model was trained with feature engineering and preprocessing techniques to improve performance over a baseline model.
+This project aims to predict the duration of taxi trips in New York City using machine learning techniques. A Ridge regression model was trained on a **sample of the dataset**, incorporating advanced feature engineering and preprocessing techniques to improve performance.
 
-Dataset: [NYC Taxi Trip Duration (Kaggle)](https://www.kaggle.com/competitions/nyc-taxi-trip-duration/overview)
+## Dataset
+The dataset is from Kaggle's [NYC Taxi Trip Duration](https://www.kaggle.com/competitions/nyc-taxi-trip-duration/overview) competition. It contains details of taxi trips, including pickup and dropoff locations, timestamps, and other relevant information.
 
 ## Feature Engineering
-### Baseline Model
-The baseline model includes basic feature extraction from the pickup timestamp:
-- **Datetime Features**: Extracted `day_of_week`, `hour`, `month`, and `day_of_year` from `pickup_datetime`.
-- **Dropped Unnecessary Columns**: Removed `id` and `vendor_id`.
+Feature engineering was applied to extract meaningful insights from raw data. Two versions of feature engineering were implemented: **Baseline** and **Best Model**.
 
-### Best Model
-In addition to the baseline features, the best model includes advanced feature engineering:
-- **Distance Features**: `haversine_distance`, `manhattan_distance`, and `euclidean_distance` were computed using latitude and longitude.
-- **Bearing Feature**: Represents the direction of travel.
-- **Log Transformation**: Applied to `trip_duration` and distance-related features to reduce skewness.
-- **Additional Features**: Tested various holiday and traffic congestion-related features, but they were excluded as they did not improve accuracy.
+### Baseline Feature Engineering
+- Dropped unnecessary columns (`id`, `vendor_id`).
+- Converted `pickup_datetime` to a datetime object.
+- Extracted time-based features (`day_of_week`, `hour`, `month`, `day_of_year`).
+
+### Best Model Feature Engineering
+- Included all baseline feature engineering steps.
+- Added distance-based features: `haversine_distance`, `manhattan_distance`, and `euclidean_distance`.
+- Applied logarithmic transformation to distance columns.
+- Computed `bearing` (direction of travel).
+- Applied log transformation to the target variable (`trip_duration`).
 
 ## Preprocessing
-### Baseline Model
-- **Categorical Features**: One-hot encoded.
-- **Numerical Features**: Standardized using `StandardScaler`.
+### Baseline Preprocessing
+- Applied **One-Hot Encoding** for categorical features.
+- Standardized numerical features using **StandardScaler**.
 
-### Best Model
-- **Categorical Features**: One-hot encoded.
-- **Numerical Features**: Applied **PolynomialFeatures (degree=3)** to create interactions, followed by `StandardScaler`.
+### Best Model Preprocessing
+- Applied **One-Hot Encoding** for categorical features.
+- Applied **PolynomialFeatures (degree=3) + StandardScaler** for numerical features.
 
 ## Model Training
-Both models were trained using a Ridge regression model with `alpha=1`.
+The model pipeline consists of:
+1. Feature Engineering
+2. Data Preprocessing
+3. Training a **Ridge Regression model** (`alpha=1`)
 
 ## Performance Comparison
 | Model        | Train R²  | Train MSE  | Validation R²  | Validation MSE  |
-|-------------|----------|------------|---------------|----------------|
-| Baseline    | 0.3326   | 0.4089     | 0.3246        | 0.3939         |
-| Best Model  | 0.7091   | 0.1414     | 0.7063        | 0.1409         |
+|-------------|-----------|-----------|----------------|-----------------|
+| Baseline    | 0.3326    | 0.4089    | 0.3246         | 0.3939          |
+| Best Model  | 0.7091    | 0.1414    | 0.7063         | 0.1409          |
 
-The best model significantly outperformed the baseline, showing higher R² and lower MSE on both training and validation sets.
+The **Best Model** significantly outperforms the **Baseline Model**, showing a much higher R² score and lower Mean Squared Error (MSE) on both training and validation sets.
 
-## How to Run the Project
-1. Install dependencies:  
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. Run the main script:  
+## Notes
+- The model was trained on a **sample** of the dataset rather than the entire dataset due to computational constraints.
+- Some additional features (e.g., public holidays, seasons) were tested but did not significantly improve model performance, so they were excluded.
+
+## How to Run
+1. Clone the repository.
+2. Install dependencies using `pip install -r requirements.txt`.
+3. Run the training script:
    ```bash
    python main.py
-   ```
-3. Choose between training (`1`) or inference (`2`).
-
-## Conclusion
-By incorporating advanced feature engineering and preprocessing techniques, the Ridge model's performance improved significantly over the baseline. The project showcases the importance of feature selection and transformation in predictive modeling.
+   
